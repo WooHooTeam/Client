@@ -5,6 +5,7 @@ import 'package:myapp/Components/Rounded_input_field.dart';
 import 'package:myapp/Components/already_hava_an_account_check.dart';
 import 'package:myapp/Components/rounded_password_field.dart';
 import 'package:myapp/Components/text_field_container.dart';
+import 'package:myapp/Screens/HomeScreen/HomePage.dart';
 import 'package:myapp/Screens/login/components/Background.dart';
 import 'package:myapp/contants.dart';
 import 'package:http/http.dart' as http;
@@ -51,7 +52,34 @@ class Body extends StatelessWidget {
           text: "LOGIN",
           press: () {
             Auth auth = new Auth();
-            auth.insertData(id, pass);
+            Future<String> result=auth.insertData(id, pass);
+            result.then((value) {
+              if(value=="Error"){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("로그인 에러"),
+                      content: new Text("계정 정보를 확인해주세요"),
+                      actions: <Widget>[
+                        new FlatButton(
+                          child: new Text("닫기"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+              else{
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
+
+              }
+            });
           },
         ),
         SizedBox(height: size.height * 0.03),
