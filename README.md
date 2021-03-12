@@ -16,17 +16,16 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-### 21.02.14 ver
+## 21.02.14 ver
 <p align=center>
-  <img src = "https://github.com/WooHooTeam/Client/blob/master/ScreenShot/Login.png" width="35%" align="left">
-  <img src = "https://github.com/WooHooTeam/Client/blob/master/ScreenShot/Login2.png" width="35%" align="left">
-  <img width="20%" align="left" alt="스크린샷 2021-03-05 오후 5 05 36" src="https://github.com/dngur6344/ICN_app/blob/master/Animation.gif">
+  <img src = "https://github.com/WooHooTeam/Client/blob/master/ScreenShot/Login.png" width="30%" height="100%" align="left">
+  <img src = "https://github.com/WooHooTeam/Client/blob/master/ScreenShot/Login2.png" width="30%" height="100%" align="left">
+  <img width="28%" align="left" alt="스크린샷 2021-03-05 오후 5 05 36" src="https://github.com/dngur6344/ICN_app/blob/master/Animation.gif">
 </p>
 
 
 
-
-### 21.03.05 ver
+## 21.03.05 ver
 <p>
   <img width="45%" align="left" alt="스크린샷 2021-03-05 오후 5 04 11" src="https://user-images.githubusercontent.com/43164924/110085740-d11fe800-7dd4-11eb-8378-d805710f8297.png">
   <img width="45%" align="left" alt="스크린샷 2021-03-05 오후 5 05 36" src="https://user-images.githubusercontent.com/43164924/110085890-03c9e080-7dd5-11eb-819c-25f440ea04be.png">
