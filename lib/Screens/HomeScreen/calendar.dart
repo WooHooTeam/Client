@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'addEvent.dart';
 import 'model/ServerProp.dart';
 
@@ -17,9 +15,6 @@ final Map<DateTime, List> _holidays = {
 };
 
 class MyHomePage extends StatefulWidget {
-  //MyHomePage({Key key, this.title}) : super(key: key);
-
-  //final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
