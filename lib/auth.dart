@@ -24,6 +24,7 @@ class Auth {
         body: msg);
     if (response.statusCode == 200) {
       // 만약 서버가 OK 응답을 반환하면, JSON을 파싱합니다.
+      print(json.decode(response.body));
       print(json.decode(response.body)["access_token"]);
       return json.decode(response.body)["access_token"];
     } else {
