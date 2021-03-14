@@ -39,3 +39,7 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+#Specific files
+ServerProp.dart
+Propertises.dart
