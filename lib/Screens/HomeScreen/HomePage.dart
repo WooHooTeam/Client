@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// Example holidays
 import 'package:myapp/Screens/HomeScreen/model/aliments.dart';
 import 'package:myapp/Screens/HomeScreen/widgets/aliment.dart';
 import 'package:myapp/Screens/HomeScreen/widgets/card_item.dart';
