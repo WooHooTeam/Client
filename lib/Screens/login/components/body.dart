@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:myapp/auth.dart';
+import 'package:myapp/Properties.dart' as prop;
 
 class Body extends StatelessWidget {
   const Body({
@@ -75,6 +76,7 @@ class Body extends StatelessWidget {
                 );
               }
               else{
+                prop.token=value;
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomePage()));
 
