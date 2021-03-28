@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'addEvent.dart';
 import 'model/ServerProp.dart';
 
+import 'package:myapp/Properties.dart' as prop;
+
 final Map<DateTime, List> _holidays = {
   DateTime(2019, 1, 1): ['New Year\'s Day'],
   DateTime(2019, 1, 6): ['Epiphany'],
@@ -484,7 +486,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 }
 Future<List<Schedule>> fetchSchedule() async{
   ServerProp serverProp=ServerProp();
-  final response = await http.get(serverProp.server+'/schedule/all');//http.get('http://localhost:8080/schedule/all');
+  final response = await http.get(serverProp.server+'/schedule/all',headers:{'Authorization': prop.token});//http.get('http://localhost:8080/schedule/all');
   if(response.statusCode==200){
     return ScheduleImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
   }
