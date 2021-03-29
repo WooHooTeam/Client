@@ -1,10 +1,4 @@
-import 'package:myapp/Screens/HomeScreen/calendar.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:myapp/Screens/HomeScreen/HomePage.dart';
-import 'package:myapp/Screens/HomeScreen/Info.dart';
-// Example holidays
 import 'package:myapp/Screens/HomeScreen/model/aliments.dart';
 import 'package:myapp/Screens/HomeScreen/widgets/aliment.dart';
 import 'package:myapp/Screens/HomeScreen/widgets/card_item.dart';
