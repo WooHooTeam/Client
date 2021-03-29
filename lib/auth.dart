@@ -13,12 +13,12 @@ class Auth {
       'password': pass
     };
     final response = await http.post(
-        'http://' +
+        Uri.parse('http://' +
             // prop.client_id +
             // ':' +
             // prop.client_secret +
             // '@' +
-            prop.authServer,
+            prop.authServer),
         headers: {'content-type': 'application/json'},
         body: json.encode(msg));
     if (response.statusCode == 200) {

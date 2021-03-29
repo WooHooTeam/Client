@@ -155,8 +155,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   _events[posting[i].moment].add([posting[i].title,posting[i].description,posting[i].schedule_no]);
                 }
                 else {
-                  List<List> temp_list = List<List>();
-                  List<Object> tmp_list2 = List<Object>();
+                  List<List> temp_list = [];
+                  List<Object> tmp_list2 = [];
                   tmp_list2.add(posting[i].title);
                   tmp_list2.add(posting[i].description);
                   tmp_list2.add(posting[i].schedule_no);
@@ -337,7 +337,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            RaisedButton(
+            ElevatedButton(
               child: Text('Month'),
               onPressed: () {
                 setState(() {
@@ -345,7 +345,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 });
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('2 weeks'),
               onPressed: () {
                 setState(() {
@@ -353,7 +353,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 });
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Week'),
               onPressed: () {
                 setState(() {
@@ -395,7 +395,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 title: new Text(_selectedEvents[index][0].toString()),
                 content: new Text(_selectedEvents[index][1].toString()),
                 actions: <Widget>[
-                  new FlatButton(
+                  new TextButton(
                     child: new Text("Close"),
                     onPressed: () {
                       Navigator.pop(context);
@@ -413,7 +413,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   return AlertDialog(
                     content:new Text("삭제하시겠습니까?"),
                     actions:<Widget>[
-                      new FlatButton(
+                      new TextButton(
                         child: new Text("예"),
                         onPressed: (){
                           setState(() {
@@ -424,7 +424,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                           Navigator.pop(context);
                         },
                       ),
-                      new FlatButton(
+                      new TextButton(
                         child: new Text("아니요"),
                         onPressed: (){
                           Navigator.pop(context);
@@ -481,12 +481,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void delete_list(int schedule_no){
     ServerProp serverProp=ServerProp();
     final msg = jsonEncode({'schedule_no':schedule_no});//jsonEncode({'moment':DateFormat('yyyy-MM-dd').format(date),'title':title,'description':description});
-    http.post(serverProp.server+'/schedule/deleteEvent',headers:{'content-type':'application/json'},body: msg);
+    http.post(Uri.parse(serverProp.server+'/schedule/deleteEvent'),headers:{'content-type':'application/json','Authorization': prop.token},body: msg);
   }
 }
 Future<List<Schedule>> fetchSchedule() async{
   ServerProp serverProp=ServerProp();
-  final response = await http.get(serverProp.server+'/schedule/all',headers:{'Authorization': prop.token});//http.get('http://localhost:8080/schedule/all');
+  final response = await http.get(Uri.parse(serverProp.server+'/schedule/all'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/schedule/all');
   if(response.statusCode==200){
     return ScheduleImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
   }
@@ -506,7 +506,7 @@ class Schedule{
 class ScheduleImpl{
 
   List<Schedule> fromJson(List<dynamic> json){
-    List<Schedule> scheduleList = List<Schedule>();
+    List<Schedule> scheduleList = [];
     print(DateTime.parse(json[0]['moment'].toString().substring(0,10)));
     for(int i=0;i<json.length;i++){
       scheduleList.add(Schedule(schedule_no:json[i]['schedule_no'],moment:DateTime.parse(json[i]['moment'].toString().substring(0,10)),title: json[i]['title'],description: json[i]['description']));

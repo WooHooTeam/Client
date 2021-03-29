@@ -5,6 +5,8 @@ import 'package:myapp/Screens/HomeScreen/model/ServerProp.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:http/http.dart' as http;
+import 'package:myapp/Properties.dart' as prop;
+
 
 class HeaderTile extends StatelessWidget{
   @override
@@ -77,7 +79,7 @@ class Info extends StatelessWidget {
 
 Future<List<Post>> fetchPost() async{
   ServerProp serverProp=ServerProp();
-  final response = await http.get(serverProp.server+'/teacher/all');//http.get('http://localhost:8080/example/all');
+  final response = await http.get(Uri.parse(serverProp.server+'/teacher/all'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/example/all');
 
   if(response.statusCode==200){
     print(response.body);
@@ -112,10 +114,10 @@ class Post{
 
 }
 class PostImpl{
-  List<Post> peopleList = List<Post>();
+  List<Post> peopleList = [];
 
   List<Post> fromJson(List<dynamic> json){
-    List<Post> peopleList = List<Post>();
+    List<Post> peopleList = [];
     for(int i=0;i<json.length;i++){
       peopleList.add(Post(name:json[i]['teacherName'],birthday: json[i]['birthday'],classname: json[i]['className']));
     }

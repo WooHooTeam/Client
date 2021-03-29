@@ -64,7 +64,7 @@ class Body extends StatelessWidget {
                       title: new Text("로그인 에러"),
                       content: new Text("계정 정보를 확인해주세요"),
                       actions: <Widget>[
-                        new FlatButton(
+                        new TextButton(
                           child: new Text("닫기"),
                           onPressed: () {
                             Navigator.pop(context);
@@ -77,6 +77,7 @@ class Body extends StatelessWidget {
               }
               else{
                 prop.token=value;
+                prop.userid=id;
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomePage()));
 
