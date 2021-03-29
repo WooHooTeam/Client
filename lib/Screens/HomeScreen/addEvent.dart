@@ -7,6 +7,7 @@ import 'HomePage.dart';
 //import 'navbar.dart';
 import 'package:http/http.dart' as http;
 import 'calendar.dart';
+import 'package:myapp/Properties.dart' as prop;
 
 class addEvent extends StatelessWidget{
   static const String id = 'settings_screen';
@@ -56,14 +57,12 @@ class addEvent extends StatelessWidget{
                         maxLines: 5,
                         minLines: 3
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () => {if (formKey.currentState.validate()) {
 
                         formKey.currentState.save(),insertData(),Navigator.pop(context, 'Save Complete!')}
                       },
-                      child: Text('Save Complete!'),
-                      color: Colors.blue,
-                      textColor: Colors.white,
+                      child: Text('Save Complete!')
                     )
                   ]),
             ),
@@ -73,7 +72,7 @@ class addEvent extends StatelessWidget{
   }
   void insertData(){
     final msg = jsonEncode({'moment':DateFormat('yyyy-MM-dd').format(data['Date']),'title':data['title'],'description':data['description']});
-    http.post(serverProp.server+'/schedule/insertEvent',headers:{'content-type':'application/json'},body: msg);
+    http.post(Uri.parse(serverProp.server+'/schedule/insertEvent'),headers:{'content-type':'application/json','Authorization':prop.token},body: msg);
     //http.get(serverProp.local+'/schedule/insertEvent?moment='+DateFormat('yyyy-MM-dd').format(data['Date'])+'&title='+data['title']+'&description='+data['description']);
   }
 //적힌 데이터들을 이제 spring 서버를 통해 DB로 Post 방식으로 insert할 것이다.

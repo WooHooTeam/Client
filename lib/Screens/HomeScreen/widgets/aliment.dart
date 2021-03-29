@@ -60,8 +60,7 @@ class AlimentWidget extends StatelessWidget {
               height: 1.0,*/
             ),
             Container(
-              child: OutlineButton(
-                borderSide: BorderSide(color: theme.colors[0]),
+              child: OutlinedButton(
                 onPressed: (){
                   if(aliment.name=="Teacher") {
                     Navigator.push(context,
@@ -79,7 +78,6 @@ class AlimentWidget extends StatelessWidget {
 
                   }
                 },
-                shape: StadiumBorder(),
                 child: SizedBox(
                   width: 56.0,
                   height: 45.0,
