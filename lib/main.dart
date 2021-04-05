@@ -3,7 +3,6 @@ import 'package:myapp/Screens/Welcome/welcom_screen.dart';
 import 'package:myapp/contants.dart';
 
 void main() => runApp(MyApp());
-
 class MyApp extends StatelessWidget {
   //this widget is a root
   @override
