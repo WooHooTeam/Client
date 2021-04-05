@@ -15,14 +15,17 @@ import 'package:myapp/auth.dart';
 import 'package:myapp/Properties.dart' as prop;
 
 class Body extends StatelessWidget {
-  const Body({
+  String id="";
+  String pass="";
+  Body({
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String id;
-    String pass;
+
+    //final _roundedInputField = RoundedInputField(hintText: "Your Email");
+    //final _roundedPasswordField = RoundedPasswordField();
     Size size = MediaQuery.of(context).size;
     return Background(
         child: Column(
@@ -49,11 +52,13 @@ class Body extends StatelessWidget {
             pass = value;
           },
         ),
+        //_roundedInputField,
+        //_roundedPasswordField,
         RoundedButton(
           text: "LOGIN",
           press: () {
             Auth auth = new Auth();
-            Future<String> result=auth.insertData(id, pass);
+            Future<String> result=auth.insertData(id,pass);
             result.then((value) {
               if(value=="Error"){
                 showDialog(
@@ -76,6 +81,7 @@ class Body extends StatelessWidget {
                 );
               }
               else{
+                print(value);
                 prop.token=value;
                 prop.userid=id;
                 Navigator.push(context,
