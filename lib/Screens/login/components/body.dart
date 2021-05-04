@@ -56,6 +56,8 @@ class Body extends StatelessWidget {
         //_roundedPasswordField,
         RoundedButton(
           text: "LOGIN",
+          textColor: Colors.black,
+          color: Colors.blue,
           press: () {
             Auth auth = new Auth();
             Future<String> result=auth.insertData(id,pass);
