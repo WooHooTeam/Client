@@ -66,13 +66,13 @@ class Aliments {
         swimTime: 30.0,
         workoutTime: 50.0),
     Aliment(
-        name: "Cake",
+        name: "QT",
         background: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [const Color(0xFFFBD3E9), const Color(0xFFBB377D)],
         ),
-        subtitle: "뭘할까 2",
+        subtitle: "게시판",
         image: "assets/images/cake.svg",
         bottomImage: "assets/images/bottom_cake.svg",
         totalCalories: 195.0,

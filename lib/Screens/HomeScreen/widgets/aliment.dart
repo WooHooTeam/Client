@@ -1,3 +1,4 @@
+import 'package:myapp/Screens/HomeScreen/QT/QTListScreen.dart';
 import 'package:myapp/Screens/HomeScreen/calendar.dart';
 //import 'package:myapp/Screens/HomeScreen/map.dart';
 import 'package:myapp/Screens/HomeScreen/model/aliment.dart';
@@ -73,9 +74,11 @@ class AlimentWidget extends StatelessWidget {
                   else if(aliment.name=="Map"){
                     /*Navigator.push(context,
                         MaterialPageRoute(builder: (context) => map()));*/
+                    print("dddd");
                   }
-                  else{
-
+                  else if(aliment.name=="QT"){
+                    print("gggg");
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => QTListScreen()));
                   }
                 },
                 child: SizedBox(

@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:myapp/auth.dart';
 import 'package:myapp/Properties.dart' as prop;
+import 'package:jwt_decode/jwt_decode.dart';
 
 class Body extends StatelessWidget {
   String id="";
@@ -56,6 +57,8 @@ class Body extends StatelessWidget {
         //_roundedPasswordField,
         RoundedButton(
           text: "LOGIN",
+          textColor: Colors.black,
+          color: Colors.blue,
           press: () {
             Auth auth = new Auth();
             Future<String> result=auth.insertData(id,pass);
@@ -82,10 +85,25 @@ class Body extends StatelessWidget {
               }
               else{
                 print(value);
+                Map<String, dynamic> payload = Jwt.parseJwt(value);
+                prop.koreanname=payload['korean_name'];
                 prop.token=value;
                 prop.userid=id;
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                showDialog(context: context,
+                    builder: (BuildContext context){
+                      return AlertDialog(
+                        title: new Text("로그인 성공"),
+                        content: new Text("환영합니다. "+prop.koreanname + "님!"),
+                        actions: <Widget>[
+                          new TextButton(onPressed: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => HomePage()));
+                            }, child: new Text("확인"))
+                        ],
+                      );
+                    });
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => HomePage()));
 
               }
             });
