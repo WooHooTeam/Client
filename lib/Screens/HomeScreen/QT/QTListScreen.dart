@@ -1,27 +1,48 @@
 import 'dart:convert';
 
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Screens/HomeScreen/QT/QTElementScreen.dart';
+import 'package:myapp/Screens/HomeScreen/QT/QTInsertScreen.dart';
 import 'package:myapp/Screens/HomeScreen/model/ServerProp.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/Properties.dart' as prop;
 
-class QTListScreen extends StatelessWidget {
+class QTListScreen extends StatefulWidget {
+
+  @override
+  _QTListScreen createState() => _QTListScreen();
+}
+class _QTListScreen extends State<QTListScreen>{
 
   Future<List<Content>> items;
-  QTListScreen() {
+
+  @override
+  void initState(){
+
     items=fetchContent();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("게시글 목록")),
-        floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            //추가할 부분 생성
-          },
-          child:Icon(Icons.add),
-          backgroundColor: Colors.purple,
+        appBar: AppBar(title: Text("게시글 목록"),
+            actions:<Widget>[
+              new IconButton(
+                icon: new Icon(Icons.refresh),
+                onPressed: (){
+                  setState((){
+                    items=fetchContent();
+                  });
+                  }
+                )
+            ]
+        ),
+        floatingActionButton: OpenContainer(
+          transitionDuration: Duration(milliseconds: 300),
+          closedBuilder: (BuildContext c, VoidCallback action) => (FloatingActionButton(child: Icon(Icons.add),backgroundColor: Colors.purple)),
+          openBuilder: (BuildContext c, VoidCallback action) => QTInertScreen(),
+          tappable: true,
         ),
         body: FutureBuilder<List<Content>>(
             future: items,
@@ -37,6 +58,13 @@ class QTListScreen extends StatelessWidget {
                         title: Text(posting[index].title),
                         subtitle: Text(posting[index].writer),
                         trailing: Icon(Icons.arrow_forward_ios),
+                        onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => QTElementScreen(posting[index]))).then((value) => {
+                          setState((){
+                            if(value=="refresh") {
+                              items = fetchContent();
+                            }
+                          })
+                        }),
                       );
                     }
                 );
