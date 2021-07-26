@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Screens/HomeScreen/QT/QTInsertScreen.dart';
 import 'package:myapp/Screens/HomeScreen/model/ServerProp.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/Properties.dart' as prop;
@@ -11,17 +13,15 @@ class QTListScreen extends StatelessWidget {
   QTListScreen() {
     items=fetchContent();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("게시글 목록")),
-        floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            //추가할 부분 생성
-          },
-          child:Icon(Icons.add),
-          backgroundColor: Colors.purple,
+        floatingActionButton: OpenContainer(
+          transitionDuration: Duration(milliseconds: 300),
+          closedBuilder: (BuildContext c, VoidCallback action) => (FloatingActionButton(child: Icon(Icons.add),backgroundColor: Colors.purple)),
+          openBuilder: (BuildContext c, VoidCallback action) => QTInertScreen(),
+          tappable: true,
         ),
         body: FutureBuilder<List<Content>>(
             future: items,
