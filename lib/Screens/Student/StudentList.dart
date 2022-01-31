@@ -160,7 +160,7 @@ class _StudentItemState extends State<StudentItem> {
   void _onTap() {
     if (_selected) {
       final page = StudentDetail(
-        location: widget.item,
+        student: widget.item,
       );
       Navigator.of(context).push(
         PageRouteBuilder(
