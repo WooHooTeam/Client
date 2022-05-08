@@ -69,6 +69,26 @@ class Body extends StatelessWidget {
                   builder: (BuildContext context) {
                     // return object of type Dialog
                     return AlertDialog(
+                      title: new Text("서버 에러"),
+                      content: new Text("인증을 진행하던 중 에러가 발생했습니다. 다시 시도해주세요."),
+                      actions: <Widget>[
+                        new TextButton(
+                          child: new Text("닫기"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+              else if(value=="UNAUTHORIZED"){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
                       title: new Text("로그인 에러"),
                       content: new Text("계정 정보를 확인해주세요"),
                       actions: <Widget>[

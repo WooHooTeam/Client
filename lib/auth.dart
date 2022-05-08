@@ -23,8 +23,12 @@ class Auth {
         body: json.encode(msg));
     if (response.statusCode == 200) {
       // 만약 서버가 OK 응답을 반환하면, JSON을 파싱합니다.
-      return response.body;//json.decode(response.body)["access_token"];
-    } else {
+      return json.decode(response.body)['data']['token'];//json.decode(response.body)["access_token"];
+    }
+    else if(response.statusCode == 401){
+      return "UNAUTHORIZED";
+    }
+    else {
       // 만약 응답이 OK가 아니면, 에러를 던집니다.
       return "Error";
       throw Exception('Failed to load post');
