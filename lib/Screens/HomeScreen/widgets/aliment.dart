@@ -5,6 +5,8 @@ import 'package:myapp/Screens/HomeScreen/model/aliment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/Screens/HomeScreen/Info.dart';
+import 'package:myapp/Screens/Student/StudentList.dart';
+import 'package:myapp/Screens/Student/ClassSeparate.dart';
 
 class AlimentWidget extends StatelessWidget {
   final LinearGradient theme;
@@ -67,6 +69,9 @@ class AlimentWidget extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Info()));
                   }
+                  else if(aliment.name=="Student"){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ClassSeparate()));//TravelConceptPage()));
+                  }
                   else if(aliment.name=="Calendar"){
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => MyHomePage()));
@@ -78,7 +83,7 @@ class AlimentWidget extends StatelessWidget {
                   }
                   else if(aliment.name=="QT"){
                     print("gggg");
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => QTListScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => QTListScreen(),settings: RouteSettings(name:"QTList")));
                   }
                 },
                 child: SizedBox(

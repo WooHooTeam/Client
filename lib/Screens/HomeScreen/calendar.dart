@@ -478,17 +478,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     final msg = jsonEncode({'schedule_no':schedule_no});//jsonEncode({'moment':DateFormat('yyyy-MM-dd').format(date),'title':title,'description':description});
     http.post(Uri.parse(serverProp.server+'/schedule/deleteEvent'),headers:{'content-type':'application/json','Authorization': prop.token},body: msg);
   }
-}
-Future<List<Schedule>> fetchSchedule() async{
-  ServerProp serverProp=ServerProp();
-  final response = await http.get(Uri.parse(serverProp.server+'/schedule/all'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/schedule/all');
-  if(response.statusCode==200){
-    return ScheduleImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
+
+  Future<List<Schedule>> fetchSchedule() async{
+    ServerProp serverProp=ServerProp();
+    final response = await http.get(Uri.parse(serverProp.server+'/schedule/all'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/schedule/all');
+    if(response.statusCode==200){
+      return ScheduleImpl().fromJson(json.decode(utf8.decode(response.bodyBytes))['data']);
+    }
+    else if(response.statusCode==401){
+      showDialog(context: context,builder : (BuildContext context){
+        return AlertDialog(
+            content:new Text("로그인 시간이 만료되었습니다."),
+            actions:<Widget>[
+              new TextButton(
+                  child: new Text("확인"),
+                  onPressed: (){
+                    Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                  }
+              )
+            ]
+        );
+      });
+    }
+    else{
+      throw Exception('Failed to load post');
+    }
   }
-  else{
-    throw Exception('Failed to load post');
-  }
 }
+
 
 class Schedule{
   final int schedule_no;

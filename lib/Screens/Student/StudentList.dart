@@ -138,6 +138,31 @@ class _StudentListState extends State<StudentList> {
       )
     );
   }
+  Future<List<StudentInf>> fetchStudent(String className) async{
+    ServerProp serverProp=ServerProp();
+    final response = await http.get(Uri.parse(serverProp.server+'/student/search/'+className),headers: {'Authorization':prop.token});
+    if(response.statusCode==200){
+      return StudentInfImpl().fromJson(json.decode(utf8.decode(response.bodyBytes))['data']);
+    }
+    else if(response.statusCode==401){
+      showDialog(context: context,builder : (BuildContext context){
+        return AlertDialog(
+            content:new Text("로그인 시간이 만료되었습니다."),
+            actions:<Widget>[
+              new TextButton(
+                  child: new Text("확인"),
+                  onPressed: (){
+                    Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                  }
+              )
+            ]
+        );
+      });
+    }
+    else{
+      throw Exception('Failed to load post');
+    }
+  }
 }
 
 class StudentItem extends StatefulWidget {
@@ -365,16 +390,7 @@ final avatars = [
   'https://randomuser.me/api/portraits/thumb/men/10.jpg',
 ];
 
-Future<List<StudentInf>> fetchStudent(String className) async{
-  ServerProp serverProp=ServerProp();
-  final response = await http.get(Uri.parse(serverProp.server+'/student/search/'+className),headers: {'Authorization':prop.token});
-  if(response.statusCode==200){
-    return StudentInfImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
-  }
-  else{
-    throw Exception('Failed to load post');
-  }
-}
+
 
 class StudentInfImpl{
 

@@ -81,7 +81,22 @@ Future<List<Post>> fetchPost() async{
 
   if(response.statusCode==200){
     print(response.body);
-    return PostImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    return PostImpl().fromJson(json.decode(utf8.decode(response.bodyBytes))['data']);
+  }
+  else if(response.statusCode==401){
+    showDialog(builder : (BuildContext context){
+      return AlertDialog(
+          content:new Text("로그인 시간이 만료되었습니다."),
+          actions:<Widget>[
+            new TextButton(
+                child: new Text("확인"),
+                onPressed: (){
+                  Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                }
+            )
+          ]
+      );
+    });
   }
   else{
     throw Exception('Failed to load post');
