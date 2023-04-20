@@ -43,4 +43,5 @@ samples, guidance on mobile development, and a full API reference.
 
 
 ## GIF(초기)
-<img width="33%" align="left" alt="스크린샷 2021-03-05 오후 5 05 36" src="https://github.com/dngur6344/ICN_app/blob/master/Animation.gif">
+<img width="33%" align="left" alt="스크린샷 2021-03-05 오후 5 05 36" src="https://user-images.githubusercontent.com/43164924/233368883-85527ea4-07d0-41b4-9a7a-0bf4cfeaa13b.gif">
+
