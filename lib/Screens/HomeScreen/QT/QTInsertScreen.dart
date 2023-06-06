@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:myapp/Properties.dart' as prop;
 import 'package:myapp/Screens/HomeScreen/QT/QTListScreen.dart';
+import '../model/ServerProp.dart';
 
 class QTInertScreen extends StatelessWidget{
   final formKey = GlobalKey<FormState>();
@@ -23,7 +24,29 @@ class QTInertScreen extends StatelessWidget{
                 icon: new Icon(Icons.save),
                   onPressed: () => {
                   if (formKey.currentState.validate()) {
-                    formKey.currentState.save(),insertData().whenComplete(() => Navigator.pop(context))}
+                    formKey.currentState.save(),
+                    insertData().whenComplete((){
+                      Navigator.pop(context);
+                    })
+                        .onError((error, stackTrace) =>
+                        showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        // return object of type Dialog
+                        return AlertDialog(
+                          content: new Text("문제가 발생했습니다. 다시 시도해 주세요."),
+                          actions: <Widget>[
+                            new TextButton(
+                              child: new Text("확인"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    )
+                    )}
                   }
               ),
               new IconButton(
@@ -89,11 +112,12 @@ class QTInertScreen extends StatelessWidget{
     );
   }
   Future<http.Response> insertData() async{
+    ServerProp serverProp = ServerProp();
     DateTime _selectedDay = DateTime.now();
     String ss = _selectedDay.toString().substring(0,10);
     _selectedDay = DateTime.parse(ss);
     data['datetime']=_selectedDay;
     final msg = jsonEncode({'datetime':DateFormat('yyyy-MM-dd').format(data['datetime']),'title':data['title'],'maintext':data['maintext']});
-    return http.post(Uri.parse('http://localhost:8078'+'/content/insert'),headers:{'content-type':'application/json','Authorization':prop.token},body: msg);
+    return http.post(Uri.parse(serverProp.contentserver+'/content/insert'),headers:{'content-type':'application/json','Authorization':prop.token},body: msg);
   }
 }

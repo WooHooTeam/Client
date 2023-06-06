@@ -40,7 +40,9 @@ class _QTListScreen extends State<QTListScreen>{
         ),
         floatingActionButton: OpenContainer(
           transitionDuration: Duration(milliseconds: 300),
-          closedBuilder: (BuildContext c, VoidCallback action) => (FloatingActionButton(child: Icon(Icons.add),backgroundColor: Colors.purple)),
+          closedBuilder: (BuildContext c, VoidCallback action)=>(
+            FloatingActionButton(child: Icon(Icons.add),backgroundColor: Colors.purple)
+          ),
           openBuilder: (BuildContext c, VoidCallback action) => QTInertScreen(),
           tappable: true,
         ),
@@ -70,23 +72,37 @@ class _QTListScreen extends State<QTListScreen>{
                 );
               }
               else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+                return Text("항목이 비어있습니다.");//Text("${snapshot.error}");
               }
               else return CircularProgressIndicator();
             }
         )
     );
   }
-}
-
-Future<List<Content>> fetchContent() async{
-  ServerProp serverProp=ServerProp();
-  final response = await http.get(Uri.parse('http://localhost:8078'+'/content/findAll'),headers: {'Authorization':prop.token});
-  if(response.statusCode==200){
-    return ContentImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
-  }
-  else{
-    throw Exception('Failed to load post');
+  Future<List<Content>> fetchContent() async{
+    ServerProp serverProp=ServerProp();
+    final response = await http.get(Uri.parse(serverProp.contentserver+'/content/findAll'),headers: {'Authorization':prop.token});
+    if(response.statusCode==200){
+      return ContentImpl().fromJson(json.decode(utf8.decode(response.bodyBytes))['data']);
+    }
+    else if(response.statusCode==401){
+      showDialog(context: context,builder : (BuildContext context){
+        return AlertDialog(
+            content:new Text("로그인 시간이 만료되었습니다."),
+            actions:<Widget>[
+              new TextButton(
+                  child: new Text("확인"),
+                  onPressed: (){
+                    Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                  }
+              )
+            ]
+        );
+      });
+    }
+    else{
+      throw Exception('Failed to load post');
+    }
   }
 }
 
@@ -96,15 +112,16 @@ class Content{
   final String title;
   final String maintext;
   final String writer;
+  final String username;
 
-  Content({this.contentId,this.datetime,this.title,this.maintext,this.writer});
+  Content({this.contentId,this.datetime,this.title,this.maintext,this.writer, this.username});
 }
 class ContentImpl{
 
   List<Content> fromJson(List<dynamic> json){
     List<Content> contentList = [];
     for(int i=0;i<json.length;i++){
-      contentList.add(Content(contentId:json[i]['contentId'],datetime:DateTime.parse(json[i]['datetime'].toString().substring(0,10)),title: json[i]['title'],maintext: json[i]['maintext'],writer: json[i]['writer']));
+      contentList.add(Content(contentId:json[i]['contentId'],datetime:DateTime.parse(json[i]['datetime'].toString().substring(0,10)),title: json[i]['title'],maintext: json[i]['maintext'],writer: json[i]['writer'],username: json[i]['username']));
     }
     return contentList;
   }

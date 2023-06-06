@@ -81,7 +81,22 @@ Future<List<Diary>> fetchDiary(int studentNo) async{
   ServerProp serverProp=ServerProp();
   final response = await http.get(Uri.parse(serverProp.server+'/diary/search/'+studentNo.toString()),headers: {'Authorization':prop.token});
   if(response.statusCode==200){
-    return DiaryImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    return DiaryImpl().fromJson(json.decode(utf8.decode(response.bodyBytes))['data']);
+  }
+  else if(response.statusCode==401){
+    showDialog(builder : (BuildContext context){
+      return AlertDialog(
+          content:new Text("로그인 시간이 만료되었습니다."),
+          actions:<Widget>[
+            new TextButton(
+                child: new Text("확인"),
+                onPressed: (){
+                  Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                }
+            )
+          ]
+      );
+    });
   }
   else{
     throw Exception('Failed to load post');

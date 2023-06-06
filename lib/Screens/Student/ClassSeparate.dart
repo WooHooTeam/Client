@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Screens/Score/ScoreInsertScreen.dart';
 import 'StudentList.dart';
 
 class ClassSeparate extends StatelessWidget{
@@ -20,6 +21,10 @@ class ClassSeparate extends StatelessWidget{
             ElevatedButton(
               child: Text('고등부 학생'),
               onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => StudentList(className:"고등부")));},
+            ),
+            ElevatedButton(
+              child: Text('점수 등록'),
+              onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreInsertScreen()));},
             ),
           ],
         ),

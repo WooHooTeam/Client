@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List events,List t) {
+  void _onDaySelected(DateTime day, List events, List t) {
     print('CALLBACK: _onDaySelected');
     twinkle_day = day;
     setState(() {
@@ -115,8 +115,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             ),
             new IconButton(
               icon: new Icon(Icons.add),
-              onPressed: () => {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => addEvent(twinkle_day)))
+              onPressed: () async {
+                await Navigator.push(context, MaterialPageRoute(builder: (context) => addEvent(twinkle_day)));
+                setState(() {
+                  scheduleList = fetchSchedule();
+                  flag=0;
+                });
               },
             ),
           ]
@@ -136,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
     );
   }
-  Widget _bb(){
+  Widget _bb() {
     if(flag==0) {
       flag=1;
       return FutureBuilder<List<Schedule>>(
@@ -157,13 +161,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   tmp_list2.add(posting[i].schedule_no);
                   temp_list.add(tmp_list2);
                   _events.putIfAbsent(posting[i].moment, () => temp_list);
-                  //List<String> temp_list = List<String>();
-                  //temp_list.add(posting[i].title);
-                  //_events.putIfAbsent(posting[i].moment, () => temp_list);
                 }
               }
-              //print(_events);
-              //_events.keys.forEach((element) => print(element));
               return _buildTableCalendar();
             }
             else
@@ -194,9 +193,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
-      onDaySelected: _onDaySelected,
+      onDaySelected: (date, events, holidays){
+        _onDaySelected(DateTime.parse(date.toString().substring(0,10)), events, holidays);
+      },
       onVisibleDaysChanged: _onVisibleDaysChanged,
       onCalendarCreated: _onCalendarCreated,
+      locale: 'ko_KR',
     );
   }
 
@@ -478,17 +480,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     final msg = jsonEncode({'schedule_no':schedule_no});//jsonEncode({'moment':DateFormat('yyyy-MM-dd').format(date),'title':title,'description':description});
     http.post(Uri.parse(serverProp.server+'/schedule/deleteEvent'),headers:{'content-type':'application/json','Authorization': prop.token},body: msg);
   }
-}
-Future<List<Schedule>> fetchSchedule() async{
-  ServerProp serverProp=ServerProp();
-  final response = await http.get(Uri.parse(serverProp.server+'/schedule/all'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/schedule/all');
-  if(response.statusCode==200){
-    return ScheduleImpl().fromJson(json.decode(utf8.decode(response.bodyBytes)));
+
+  Future<List<Schedule>> fetchSchedule() async{
+    ServerProp serverProp=ServerProp();
+    final response = await http.get(Uri.parse(serverProp.server+'/schedule/all'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/schedule/all');
+    if(response.statusCode==200){
+      return ScheduleImpl().fromJson(json.decode(utf8.decode(response.bodyBytes))['data']);
+    }
+    else if(response.statusCode==401){
+      showDialog(context: context,builder : (BuildContext context){
+        return AlertDialog(
+            content:new Text("로그인 시간이 만료되었습니다."),
+            actions:<Widget>[
+              new TextButton(
+                  child: new Text("확인"),
+                  onPressed: (){
+                    Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+                  }
+              )
+            ]
+        );
+      });
+    }
+    else{
+      throw Exception('Failed to load post');
+    }
   }
-  else{
-    throw Exception('Failed to load post');
-  }
 }
+
 
 class Schedule{
   final int schedule_no;

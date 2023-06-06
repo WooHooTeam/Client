@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:myapp/Screens/HomeScreen/QT/QTListScreen.dart';
 import 'package:myapp/Properties.dart' as prop;
 import 'package:http/http.dart' as http;
+import '../model/ServerProp.dart';
 
 class QTElementScreen extends StatelessWidget{
 
@@ -23,7 +24,7 @@ class QTElementScreen extends StatelessWidget{
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildButtonColumn(Colors.purple, Icons.person, 'Info',context),
+          _buildButtonColumn(Colors.purple, Icons.person, 'INFO',context),
           _buildButtonColumn(Colors.purpleAccent, Icons.near_me, 'ROUTE',context),
           _buildButtonColumn(Colors.deepPurple, Icons.delete, 'DELETE',context),
         ],
@@ -110,7 +111,7 @@ class QTElementScreen extends StatelessWidget{
   }
   void _onSearchButtonPressed(String label,BuildContext context) {
     if(label=="DELETE"){
-      if(prop.koreanname==currentContent.writer){
+      if(prop.userid==currentContent.username){
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -121,10 +122,14 @@ class QTElementScreen extends StatelessWidget{
                 new TextButton(
                   child: new Text("예"),
                   onPressed: () {
-                    Navigator.pop(context);
-                    delete_list(currentContent.contentId).whenComplete(() =>Navigator.pop(context,"refresh"));
-                  },
-                ),
+                    delete_list(currentContent.contentId).whenComplete(
+                            // () => Navigator.popUntil(context, ModalRoute.withName("QTList"))
+                        () {
+                          Navigator.pop(context);
+                          Navigator.pop(context,"refresh");
+                        }
+                    );
+                  }),
                 new TextButton(
                   child: new Text("아니오"),
                   onPressed: () {
@@ -156,10 +161,21 @@ class QTElementScreen extends StatelessWidget{
         );
       }
     }
+    // else if(label=="INFO"){
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         content: ,
+    //       )
+    //     }
+    //   )
+    // }
   }
 
   Future<Response> delete_list(int contentId) async{
+    ServerProp serverProp=ServerProp();
     final msg = jsonEncode({'contentId':contentId});
-    return http.post(Uri.parse('http://localhost:8078'+'/content/delete'),headers:{'content-type':'application/json','Authorization': prop.token},body: msg);//.whenComplete(() => null);
+    return http.post(Uri.parse(serverProp.contentserver+'/content/delete'),headers:{'content-type':'application/json','Authorization': prop.token},body: msg);//.whenComplete(() => null);
   }
 }
