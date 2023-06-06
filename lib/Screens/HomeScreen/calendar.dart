@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List events,List t) {
+  void _onDaySelected(DateTime day, List events, List t) {
     print('CALLBACK: _onDaySelected');
     twinkle_day = day;
     setState(() {
@@ -115,8 +115,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             ),
             new IconButton(
               icon: new Icon(Icons.add),
-              onPressed: () => {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => addEvent(twinkle_day)))
+              onPressed: () async {
+                await Navigator.push(context, MaterialPageRoute(builder: (context) => addEvent(twinkle_day)));
+                setState(() {
+                  scheduleList = fetchSchedule();
+                  flag=0;
+                });
               },
             ),
           ]
@@ -136,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
     );
   }
-  Widget _bb(){
+  Widget _bb() {
     if(flag==0) {
       flag=1;
       return FutureBuilder<List<Schedule>>(
@@ -157,13 +161,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   tmp_list2.add(posting[i].schedule_no);
                   temp_list.add(tmp_list2);
                   _events.putIfAbsent(posting[i].moment, () => temp_list);
-                  //List<String> temp_list = List<String>();
-                  //temp_list.add(posting[i].title);
-                  //_events.putIfAbsent(posting[i].moment, () => temp_list);
                 }
               }
-              //print(_events);
-              //_events.keys.forEach((element) => print(element));
               return _buildTableCalendar();
             }
             else
@@ -194,9 +193,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
-      onDaySelected: _onDaySelected,
+      onDaySelected: (date, events, holidays){
+        _onDaySelected(DateTime.parse(date.toString().substring(0,10)), events, holidays);
+      },
       onVisibleDaysChanged: _onVisibleDaysChanged,
       onCalendarCreated: _onCalendarCreated,
+      locale: 'ko_KR',
     );
   }
 

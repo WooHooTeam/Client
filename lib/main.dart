@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:myapp/Screens/Welcome/welcom_screen.dart';
 import 'package:myapp/contants.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  await initializeDateFormatting();
+  runApp(MyApp());
+}
 class MyApp extends StatelessWidget {
   //this widget is a root
   @override
