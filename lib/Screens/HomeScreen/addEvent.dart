@@ -74,7 +74,7 @@ class addEvent extends StatelessWidget{
   }
   void insertData() async {
     final msg = jsonEncode({'moment':DateFormat('yyyy-MM-dd').format(data['Date']),'title':data['title'],'description':data['description']});
-    await http.post(Uri.parse(serverProp.server+'/schedule/insertEvent'),headers:{'content-type':'application/json','Authorization':prop.token},body: msg);
+    await http.post(Uri.parse(serverProp.server+'/schedule'),headers:{'content-type':'application/json','Authorization':prop.token},body: msg);
     //http.get(serverProp.local+'/schedule/insertEvent?moment='+DateFormat('yyyy-MM-dd').format(data['Date'])+'&title='+data['title']+'&description='+data['description']);
   }
 //적힌 데이터들을 이제 spring 서버를 통해 DB로 Post 방식으로 insert할 것이다.

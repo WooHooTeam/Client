@@ -151,14 +151,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               if(_events.length!=0)_events.clear();//이유는 모르지만, 새로 고침 버튼을 연속 두번 눌렀을 때 이 메소드를 두번 들어가서 모든 이벤트가 두개씩 뜬다. 그래서 그걸 방지하기 위함.
               for (int i = 0; i < posting.length; i++) {
                 if (_events.containsKey(posting[i].moment) == true) {
-                  _events[posting[i].moment].add([posting[i].title,posting[i].description,posting[i].schedule_no]);
+                  _events[posting[i].moment].add([posting[i].title,posting[i].description,posting[i].scheduleId]);
                 }
                 else {
                   List<List> temp_list = [];
                   List<Object> tmp_list2 = [];
                   tmp_list2.add(posting[i].title);
                   tmp_list2.add(posting[i].description);
-                  tmp_list2.add(posting[i].schedule_no);
+                  tmp_list2.add(posting[i].scheduleId);
                   temp_list.add(tmp_list2);
                   _events.putIfAbsent(posting[i].moment, () => temp_list);
                 }
@@ -475,15 +475,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );*/
   }
 
-  void delete_list(int schedule_no){
+  void delete_list(int scheduleId){
     ServerProp serverProp=ServerProp();
-    final msg = jsonEncode({'schedule_no':schedule_no});//jsonEncode({'moment':DateFormat('yyyy-MM-dd').format(date),'title':title,'description':description});
-    http.post(Uri.parse(serverProp.server+'/schedule/deleteEvent'),headers:{'content-type':'application/json','Authorization': prop.token},body: msg);
+    final msg = jsonEncode({'schedule_no':scheduleId});//jsonEncode({'moment':DateFormat('yyyy-MM-dd').format(date),'title':title,'description':description});
+    http.delete(Uri.parse(serverProp.server+'/schedule/'+ scheduleId.toString()),headers:{'Authorization': prop.token});
   }
 
   Future<List<Schedule>> fetchSchedule() async{
     ServerProp serverProp=ServerProp();
-    final response = await http.get(Uri.parse(serverProp.server+'/schedule/all'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/schedule/all');
+    final response = await http.get(Uri.parse(serverProp.server+'/schedule'),headers: {'Authorization':prop.token});//http.get('http://localhost:8080/schedule/all');
     if(response.statusCode==200){
       return ScheduleImpl().fromJson(json.decode(utf8.decode(response.bodyBytes))['data']);
     }
@@ -510,20 +510,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
 
 class Schedule{
-  final int schedule_no;
+  final int scheduleId;
   final DateTime moment;
   final String title;
   final String description;
 
-  Schedule({this.schedule_no,this.moment,this.title,this.description});
+  Schedule({this.scheduleId,this.moment,this.title,this.description});
 }
 class ScheduleImpl{
 
   List<Schedule> fromJson(List<dynamic> json){
     List<Schedule> scheduleList = [];
-    print(DateTime.parse(json[0]['moment'].toString().substring(0,10)));
     for(int i=0;i<json.length;i++){
-      scheduleList.add(Schedule(schedule_no:json[i]['schedule_no'],moment:DateTime.parse(json[i]['moment'].toString().substring(0,10)),title: json[i]['title'],description: json[i]['description']));
+      scheduleList.add(Schedule(scheduleId:json[i]['scheduleId'],moment:DateTime.parse(json[i]['moment'].toString()),title: json[i]['title'],description: json[i]['description']));
     }
     return scheduleList;
   }
